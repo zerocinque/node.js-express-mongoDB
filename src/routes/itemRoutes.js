@@ -1,14 +1,14 @@
 var express = require('express');
 var app = express();
 var itemRouter = express.Router();
-var Item = require('../models/Item')
+var Item = require('../models/Item');
 
 itemRouter.route('/').get(function (req, res) {
     Item.find(function (err, itms) {
         if (err){
-            console.log(err);;
+            console.log(err);
         }else{
-            res.render('items', {item: itms})
+            res.render('items', {itms: itms})
         }
     })
 });
@@ -24,9 +24,32 @@ itemRouter.route('/add').get(function (req, res) {
 itemRouter.route('/add/post').post(function (req, res) {
     var item = new Item(req.body);
     item.save().then(function (item) {
-        res.redirect('/');
+        res.redirect('/items');
     }).catch(function (err) {
         res.status(400).send("unable to save to database");
+    });
+});
+
+itemRouter.route('/edit/:id').get(function (req, res) {
+    var id = req.params.id;
+    Item.findById(id, function (err, item){
+        res.render('editItem', {item: item});
+    });
+});
+
+itemRouter.route('/update/:id').post(function(req, res){
+    var id = req.params.id;
+    Item.findById(id, function (err, item) {
+        if(!item){
+            return next(new Error('Could not load Document'));
+        }else{
+            item.item = req.body.item;
+            item.save().then(function (item) {
+                res.redirect('/items');
+            }).catch(function (err) {
+                res.status(400).send("unable to update the database");
+            });
+        }
     });
 });
 

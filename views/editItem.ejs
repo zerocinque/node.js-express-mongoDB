@@ -1,3 +1,5 @@
+<!-- editItem.ejs -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,13 +9,13 @@
 </head>
 <body>
 <div class="container">
-    <h1>Add Item</h1>
-    <form method="post" action="/items/add/post">
+    <h1>Edit Item</h1>
+    <form method="post" action="/items/update/<%= item._id%>">
         <div class="form-group">
             <label for="item">Item</label>
-            <input type="text" class="form-control" id="item" name="item">
+            <input type="text" class="form-control" id="item" name="item" value="<%= item.item %>">
         </div>
-        <button type="submit" class="btn btn-default">Add</button>
+        <button type="submit" class="btn btn-default">Update</button>
     </form>
 </div>
 </body>
