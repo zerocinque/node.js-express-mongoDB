@@ -51,6 +51,13 @@ itemRouter.route('/update/:id').post(function(req, res){
             });
         }
     });
-});
+});itemRouter.route('/delete/:id').get(function (req, res) {
+    Item.findByIdAndRemove( {_id: req.params.id}, function (err, item) {
+        if (err)
+            res.json(err);
+        else
+            res.redirect('/items');
+    })
+})
 
 module.exports = itemRouter;
